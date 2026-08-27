@@ -21,13 +21,14 @@ const ICONS = {
   bar: '<line x1="12" y1="20" x2="12" y2="10"/><line x1="18" y1="20" x2="18" y2="4"/><line x1="6" y1="20" x2="6" y2="16"/>'
 };
 
+// First 6 are the "main" services shown by default; the rest expand under "View All Services".
 const SERVICES = [
-  { icon: 'fileText', title: 'Self Assessment & Personal Tax Returns', desc: 'Accurate, on-time Self Assessment filing for individuals, sole traders and directors.', price: '£150' },
+  { icon: 'fileText', title: 'Self Assessment & Personal Tax Returns', desc: 'Personal tax returns for directors, landlords, sole traders and individuals — accurate and on time.', price: '£150' },
   { icon: 'briefcase', title: 'Sole Trader Accounts', desc: 'Year-end accounts prepared and filed for self-employed businesses.', price: '£200' },
-  { icon: 'building', title: 'Limited Company Accounts & Corporation Tax', desc: 'Statutory accounts, Corporation Tax returns and Companies House filing.', price: '£400' },
-  { icon: 'cloud', title: 'Bookkeeping & Accounting Software', desc: 'Ongoing bookkeeping using Xero or QuickBooks, kept accurate and current.', price: '£75/mo' },
-  { icon: 'receipt', title: 'VAT Registration & VAT Returns', desc: 'VAT registration and quarterly returns, handled and filed correctly.', price: '£75' },
-  { icon: 'users', title: 'Payroll, PAYE & Auto-Enrolment', desc: 'Monthly payroll processing, PAYE submissions and pension auto-enrolment.', price: '£20/mo' },
+  { icon: 'building', title: 'Limited Company Accounts & Corporation Tax', desc: 'Annual accounts, Corporation Tax returns and Companies House filing — handled for you, start to finish.', price: '£400' },
+  { icon: 'cloud', title: 'Bookkeeping & Accounting Software', desc: 'Xero and QuickBooks bookkeeping to keep your records accurate and up to date.', price: '£75/mo' },
+  { icon: 'receipt', title: 'VAT Registration & VAT Returns', desc: 'Accurate, timely VAT registration and returns, prepared and filed correctly.', price: '£75' },
+  { icon: 'users', title: 'Payroll, PAYE & Auto-Enrolment', desc: 'Reliable monthly payroll, PAYE submissions and pension auto-enrolment for employers.', price: '£20/mo' },
   { icon: 'shield', title: 'CIS Registration & Monthly Returns', desc: 'CIS registration for contractors and subcontractors, plus monthly returns.', price: '£50' },
   { icon: 'home', title: 'Landlord & Property Accounts', desc: 'Rental income accounts and tax returns for individual and portfolio landlords.', price: '£200' },
   { icon: 'chart', title: 'Tax Planning & Advisory', desc: 'Proactive advice to structure your affairs tax-efficiently and legally.', price: '£100' },
@@ -39,18 +40,39 @@ const SERVICES = [
   { icon: 'calc', title: 'Financial Reporting & Business Consultancy', desc: 'Clear financial reporting and consultancy to support key business decisions.', price: '£100' }
 ];
 
+const MAIN_SERVICE_COUNT = 6;
+
 const grid = document.getElementById('servicesGrid');
 if (grid) {
-  grid.innerHTML = SERVICES.map(s => `
-    <div class="service-card">
+  grid.innerHTML = SERVICES.map((s, i) => `
+    <div class="service-card${i >= MAIN_SERVICE_COUNT ? ' extra' : ''}">
       <div class="service-icon">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${ICONS[s.icon] || ICONS.doc}</svg>
       </div>
-      <h3>${s.title}</h3>
-      <p>${s.desc}</p>
-      <span class="price-tag">from <span>${s.price}</span></span>
+      <div class="service-card-body">
+        <h3>${s.title}</h3>
+        <p>${s.desc}</p>
+      </div>
     </div>
   `).join('');
+}
+
+const toggleServicesBtn = document.getElementById('toggleServices');
+if (toggleServicesBtn && grid) {
+  toggleServicesBtn.addEventListener('click', () => {
+    const expanded = grid.classList.toggle('expanded');
+    toggleServicesBtn.textContent = expanded ? 'Show Fewer Services' : 'View All Services';
+  });
+}
+
+// ---- Transparent-over-hero header ----
+// Starts transparent so the hero photo shows through behind the logo/nav,
+// then switches to the solid bar as soon as the page scrolls past the hero.
+const siteHeader = document.querySelector('header');
+if (siteHeader) {
+  const toggleHeaderState = () => siteHeader.classList.toggle('scrolled', window.scrollY > 40);
+  toggleHeaderState();
+  window.addEventListener('scroll', toggleHeaderState, { passive: true });
 }
 
 // ---- Mobile menu ----
@@ -99,6 +121,24 @@ document.querySelectorAll('a.btn-primary').forEach(btn => {
     trackEvent('cta_click', { cta_label: btn.textContent.trim(), cta_location: btn.closest('section')?.id || 'header' });
   });
 });
+
+// ---- Contact form (FormSubmit) ----
+// FormSubmit needs an absolute return URL, so it's set at runtime rather than
+// hard-coded — this keeps the form working unchanged across localhost, a
+// Cloudflare Pages preview URL and the final live domain.
+const formNextRedirect = document.getElementById('formNextRedirect');
+if (formNextRedirect) {
+  formNextRedirect.value = window.location.origin + window.location.pathname + '?sent=true#contact';
+}
+
+// After FormSubmit redirects back with ?sent=true, show a confirmation
+// banner above the form, then clean the URL so a refresh doesn't re-show it.
+if (new URLSearchParams(window.location.search).get('sent') === 'true') {
+  const formSuccess = document.getElementById('formSuccess');
+  if (formSuccess) formSuccess.classList.add('visible');
+  const cleanUrl = window.location.origin + window.location.pathname + window.location.hash;
+  window.history.replaceState({}, document.title, cleanUrl);
+}
 
 const contactForm = document.getElementById('contactForm');
 if (contactForm) {
