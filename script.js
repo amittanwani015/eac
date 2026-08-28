@@ -52,6 +52,10 @@ if (grid) {
       <div class="service-card-body">
         <h3>${s.title}</h3>
         <p>${s.desc}</p>
+        <div class="service-footer">
+          <span class="price-label">From</span>
+          <span class="price-amount">${s.price}</span>
+        </div>
       </div>
     </div>
   `).join('');

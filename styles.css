@@ -5,6 +5,7 @@
   --navy-light: #14335c;
   --gold: #c9a227;
   --gold-light: #e6c35c;
+  --gold-dark: #806719;
   --cream: #faf8f4;
   --white: #ffffff;
   --sky-50: #f2f7fc;
@@ -55,15 +56,19 @@ ul { list-style: none; }
   min-width: 0;
 }
 
+/* --gold-dark by default: --gold (the bright accent) is ~2.3:1 on white/cream,
+   below WCAG AA's 4.5:1 for small text. .on-dark switches back to the bright
+   gold for the two instances that sit on a navy background, where it's ~6.8:1. */
 .eyebrow {
   display: inline-block;
   font-size: 0.78rem;
   letter-spacing: 0.14em;
   text-transform: uppercase;
-  color: var(--gold);
+  color: var(--gold-dark);
   font-weight: 700;
   margin-bottom: 12px;
 }
+.eyebrow.on-dark { color: var(--gold); }
 
 .section-head { max-width: 640px; margin: 0 auto 48px; text-align: center; }
 .section-head h2 { font-size: clamp(1.7rem, 3vw, 2.4rem); margin-bottom: 12px; }
@@ -157,11 +162,11 @@ header.scrolled {
   justify-content: space-between;
   padding: 13px 0 0;
 }
-.logo { display: flex; align-items: center; gap: 9px; }
-.logo svg { width: 28px; height: 28px; flex-shrink: 0; }
-.logo-text { display: flex; flex-direction: column; line-height: 1.15; gap: 1px; }
-.logo-text strong { font-family: 'Playfair Display', serif; font-size: 0.96rem; font-weight: 700; color: var(--white); text-shadow: 0 1px 4px rgba(0,0,0,0.35); letter-spacing: 0.005em; white-space: nowrap; transition: color 0.3s ease, text-shadow 0.3s ease; }
-.logo-text span { font-size: 0.5rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--gold); font-weight: 700; white-space: nowrap; }
+.logo { display: flex; align-items: center; gap: 10px; }
+.logo svg { width: 32px; height: 32px; flex-shrink: 0; }
+.logo-text { display: flex; flex-direction: column; line-height: 1.15; gap: 2px; }
+.logo-text strong { font-family: 'Playfair Display', serif; font-size: 1.22rem; font-weight: 700; color: var(--white); text-shadow: 0 1px 4px rgba(0,0,0,0.35); letter-spacing: 0.005em; white-space: nowrap; transition: color 0.3s ease, text-shadow 0.3s ease; }
+.logo-text span { font-size: 0.58rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--gold); font-weight: 700; white-space: nowrap; }
 header.scrolled .logo-text strong { color: var(--navy); text-shadow: none; }
 
 nav.main-nav {
@@ -235,13 +240,14 @@ header.scrolled .phone-pill { color: var(--navy); text-shadow: none; }
   transition: 0.2s;
 }
 header.scrolled .menu-toggle span { background: var(--navy); box-shadow: none; }
+header.scrolled .logo-text span { color: var(--gold-dark); }
 
 /* Hero */
 .hero {
   position: relative;
   background-color: var(--navy);
   background-image:
-    linear-gradient(rgba(8,20,38,0.62), rgba(8,20,38,0.72)),
+    linear-gradient(rgba(11,31,58,0.62), rgba(11,31,58,0.72)),
     url("https://images.unsplash.com/photo-1762427354397-854a52e0ded7?fm=jpg&q=80&w=2400&auto=format&fit=crop");
   background-size: cover;
   background-position: center;
@@ -311,7 +317,7 @@ header.scrolled .menu-toggle span { background: var(--navy); box-shadow: none; }
   font-weight: 700;
 }
 .director-card h3 { font-size: 1.25rem; margin-bottom: 4px; }
-.director-card .role { color: var(--gold); font-weight: 700; font-size: 0.82rem; letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 14px; }
+.director-card .role { color: var(--gold-dark); font-weight: 700; font-size: 0.82rem; letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 14px; }
 .director-card p { color: var(--gray-700); font-size: 0.92rem; }
 
 .about-list { display: grid; gap: 14px; }
@@ -319,7 +325,7 @@ header.scrolled .menu-toggle span { background: var(--navy); box-shadow: none; }
 .about-list li svg { width: 20px; height: 20px; color: var(--gold); flex-shrink: 0; margin-top: 2px; }
 
 /* Services */
-.services-section { background: var(--white); }
+.services-section { background: var(--cream); }
 .services-grid {
   display: grid;
   grid-template-columns: repeat(3, minmax(0,1fr));
@@ -344,9 +350,8 @@ header.scrolled .menu-toggle span { background: var(--navy); box-shadow: none; }
   width: 58px;
   height: 58px;
   border-radius: 14px;
-  background: linear-gradient(135deg, var(--sky-100), var(--white));
-  border: 1px solid var(--gray-200);
-  box-shadow: 0 4px 10px rgba(11,31,58,0.08);
+  background: var(--gold-100);
+  border: 1px solid rgba(201,162,39,0.3);
   color: var(--navy);
   display: flex;
   align-items: center;
@@ -358,6 +363,7 @@ header.scrolled .menu-toggle span { background: var(--navy); box-shadow: none; }
   display: flex;
   flex-direction: column;
   align-items: flex-start;
+  align-self: stretch;
   flex: 1;
   min-width: 0;
 }
@@ -365,6 +371,7 @@ header.scrolled .menu-toggle span { background: var(--navy); box-shadow: none; }
   font-size: 1.02rem;
   margin-bottom: 12px;
   padding-bottom: 10px;
+  min-height: 48px;
   position: relative;
 }
 .service-card h3::after {
@@ -378,6 +385,17 @@ header.scrolled .menu-toggle span { background: var(--navy); box-shadow: none; }
   background: var(--gold);
 }
 .service-card p { color: var(--gray-500); font-size: 0.88rem; margin-bottom: 14px; flex: 1; }
+.service-footer {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+  width: 100%;
+  margin-top: auto;
+  padding-top: 14px;
+  border-top: 1px solid var(--gray-200);
+}
+.price-label { font-size: 0.78rem; color: var(--gray-500); font-weight: 500; }
+.price-amount { font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; font-size: 1rem; font-weight: 700; color: var(--navy); }
 
 .services-toggle { text-align: center; margin-top: 32px; }
 .btn-outline-navy { border-color: var(--navy); color: var(--navy); background: none; }
@@ -388,13 +406,14 @@ header.scrolled .menu-toggle span { background: var(--navy); box-shadow: none; }
   margin-top: 40px;
   background-color: var(--navy);
   background-image:
-    linear-gradient(rgba(8,20,38,0.8), rgba(8,20,38,0.86)),
+    linear-gradient(rgba(11,31,58,0.8), rgba(11,31,58,0.86)),
     url("https://images.unsplash.com/photo-1772588627527-db42040f3a8b?fm=jpg&q=75&w=1600&auto=format&fit=crop");
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
   color: var(--white);
   border-radius: var(--radius);
+  border-top: 3px solid var(--gold);
   padding: 34px 40px;
   display: flex;
   align-items: center;
@@ -423,7 +442,7 @@ header.scrolled .menu-toggle span { background: var(--navy); box-shadow: none; }
   font-size: 0.75rem;
   letter-spacing: 0.14em;
   text-transform: uppercase;
-  color: var(--gold);
+  color: var(--gold-dark);
   font-weight: 700;
   margin-bottom: 20px;
 }
@@ -523,12 +542,13 @@ header.scrolled .menu-toggle span { background: var(--navy); box-shadow: none; }
   position: relative;
   background-color: var(--navy);
   background-image:
-    linear-gradient(rgba(8,20,38,0.75), rgba(8,20,38,0.84)),
+    linear-gradient(rgba(11,31,58,0.75), rgba(11,31,58,0.84)),
     url("https://images.unsplash.com/photo-1686061593213-98dad7c599b9?fm=jpg&q=80&w=2400&auto=format&fit=crop");
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
   padding: 64px 0;
+  border-top: 3px solid var(--gold);
 }
 .cta-band-inner {
   display: flex;
@@ -638,25 +658,32 @@ header.scrolled .menu-toggle span { background: var(--navy); box-shadow: none; }
 .form-note { font-size: 0.78rem; color: var(--gray-500); margin-top: 12px; text-align: center; }
 
 /* Footer */
-footer { background: #081527; color: rgba(255,255,255,0.7); padding: 56px 0 24px; }
-.footer-grid { display: grid; grid-template-columns: minmax(0,1.4fr) minmax(0,1fr) minmax(0,1fr) minmax(0,1fr); gap: 32px; margin-bottom: 40px; }
+footer {
+  background: linear-gradient(160deg, var(--navy-light), var(--navy));
+  color: rgba(255,255,255,0.7);
+  padding: 56px 0 24px;
+  border-top: 3px solid var(--gold);
+}
+.footer-grid { display: grid; grid-template-columns: minmax(0,1.8fr) minmax(0,0.9fr) minmax(0,0.9fr) minmax(0,0.9fr); gap: 24px; margin-bottom: 40px; }
 .footer-brand .logo-text strong, .footer-brand .logo-text span { color: var(--white); }
 .footer-brand .logo-text span { color: var(--gold-light); }
+.footer-brand .logo-text strong { font-size: 1.02rem; white-space: nowrap; }
 .footer-brand p { margin-top: 14px; font-size: 0.88rem; max-width: 280px; }
-.social-links { display: flex; gap: 12px; margin-top: 18px; }
+.social-links { display: flex; gap: 14px; margin-top: 22px; }
 .social-links a {
-  width: 36px;
-  height: 36px;
+  width: 42px;
+  height: 42px;
   border-radius: 50%;
-  background: rgba(255,255,255,0.08);
-  color: rgba(255,255,255,0.75);
+  background: rgba(201,162,39,0.18);
+  border: 1px solid rgba(201,162,39,0.35);
+  color: var(--gold-light);
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: background 0.15s ease, color 0.15s ease;
+  transition: background 0.15s ease, color 0.15s ease, transform 0.15s ease;
 }
-.social-links a:hover { background: var(--gold); color: var(--navy); }
-.social-links svg { width: 17px; height: 17px; }
+.social-links a:hover { background: var(--gold); color: var(--navy); transform: translateY(-2px); }
+.social-links svg { width: 19px; height: 19px; }
 footer h4 { color: var(--white); font-size: 0.9rem; margin-bottom: 16px; letter-spacing: 0.04em; text-transform: uppercase; }
 footer ul li { margin-bottom: 10px; font-size: 0.9rem; }
 footer ul li a:hover { color: var(--gold-light); }
@@ -727,9 +754,9 @@ footer ul li a:hover { color: var(--gold-light); }
   /* Keep logo + hamburger on one line — drop the header CTA button, the hero already has two */
   .nav-wrap { flex-wrap: nowrap; }
   .logo { min-width: 0; }
-  .logo svg { width: 24px; height: 24px; }
-  .logo-text strong { font-size: 0.84rem; }
-  .logo-text span { font-size: 0.44rem; }
+  .logo svg { width: 26px; height: 26px; }
+  .logo-text strong { font-size: 0.96rem; }
+  .logo-text span { font-size: 0.48rem; }
   .header-actions .btn-primary { display: none; }
   .header-actions { gap: 10px; }
 }
