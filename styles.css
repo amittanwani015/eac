@@ -306,15 +306,10 @@ header.scrolled .logo-text span { color: var(--gold-dark); }
   width: 96px;
   height: 96px;
   border-radius: 50%;
-  background: var(--navy);
-  color: var(--gold-light);
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  object-fit: cover;
   margin: 0 auto 18px;
-  font-family: 'Playfair Display', serif;
-  font-size: 1.9rem;
-  font-weight: 700;
+  border: 3px solid var(--gold);
+  box-shadow: 0 4px 14px rgba(11,31,58,0.18);
 }
 .director-card h3 { font-size: 1.25rem; margin-bottom: 4px; }
 .director-card .role { color: var(--gold-dark); font-weight: 700; font-size: 0.82rem; letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 14px; }
@@ -475,6 +470,7 @@ header.scrolled .logo-text span { color: var(--gold-dark); }
   color: var(--white);
   display: flex;
   flex-direction: column;
+  justify-content: center;
 }
 .why-feature .why-icon-badge { background: rgba(201,162,39,0.22); color: var(--gold-light); }
 .why-feature h3 {
@@ -494,14 +490,7 @@ header.scrolled .logo-text span { color: var(--gold-dark); }
   border-radius: 2px;
   background: var(--gold);
 }
-.why-feature p { color: rgba(255,255,255,0.8); font-size: 0.94rem; margin-bottom: 24px; }
-.why-feature-photo {
-  flex: 1;
-  min-height: 160px;
-  border-radius: 10px;
-  overflow: hidden;
-}
-.why-feature-photo img { width: 100%; height: 100%; object-fit: cover; object-position: center; }
+.why-feature p { color: rgba(255,255,255,0.8); font-size: 0.94rem; }
 
 .why-cards {
   display: grid;
@@ -728,7 +717,6 @@ footer ul li a:hover { color: var(--gold-light); }
   .about-grid { grid-template-columns: minmax(0,1fr); }
   .services-grid { grid-template-columns: repeat(2, minmax(0,1fr)); }
   .why-grid { grid-template-columns: minmax(0,1fr); }
-  .why-feature-photo { min-height: 220px; }
   .why-cards { grid-template-columns: repeat(2, minmax(0,1fr)); }
   .why-card-wide, .why-card-narrow { grid-column: span 1; }
   .contact-grid { grid-template-columns: minmax(0,1fr); }
