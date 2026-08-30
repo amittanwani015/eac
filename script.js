@@ -112,10 +112,73 @@ window.addEventListener('scroll', () => {
 });
 backToTop.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
 
+// ---- Cookie consent & Google Analytics (GA4) ----
+// PECR requires consent BEFORE any non-essential (e.g. analytics) cookie is
+// set. So the gtag.js script tag is never present on the page at all until
+// the visitor actively accepts — nothing is loaded, queued or cookied by
+// default. Consent choice is remembered in localStorage so the banner only
+// shows once; the footer's "Cookie Settings" link lets a visitor reopen the
+// banner at any time to change their mind.
+const GA_MEASUREMENT_ID = 'G-XXXXXXXXXX'; // TODO: replace with the real GA4 ID before launch
+const CONSENT_KEY = 'eac_cookie_consent'; // localStorage value: 'accepted' | 'rejected'
+
+function loadAnalytics() {
+  if (window.gaLoaded) return;
+  window.gaLoaded = true;
+  window.dataLayer = window.dataLayer || [];
+  window.gtag = function () { window.dataLayer.push(arguments); };
+  const gaScript = document.createElement('script');
+  gaScript.async = true;
+  gaScript.src = 'https://www.googletagmanager.com/gtag/js?id=' + GA_MEASUREMENT_ID;
+  document.head.appendChild(gaScript);
+  gtag('js', new Date());
+  gtag('config', GA_MEASUREMENT_ID, { anonymize_ip: true });
+}
+
+function getStoredConsent() {
+  try { return window.localStorage.getItem(CONSENT_KEY); } catch (e) { return null; }
+}
+function setStoredConsent(value) {
+  try { window.localStorage.setItem(CONSENT_KEY, value); } catch (e) { /* private-browsing / storage blocked — banner will just reappear next visit */ }
+}
+
+const cookieBanner = document.getElementById('cookieBanner');
+function showCookieBanner() { if (cookieBanner) cookieBanner.classList.add('visible'); }
+function hideCookieBanner() { if (cookieBanner) cookieBanner.classList.remove('visible'); }
+
+const existingConsent = getStoredConsent();
+if (existingConsent === 'accepted') {
+  loadAnalytics();
+} else if (existingConsent !== 'rejected') {
+  showCookieBanner();
+}
+
+const cookieAcceptBtn = document.getElementById('cookieAccept');
+if (cookieAcceptBtn) {
+  cookieAcceptBtn.addEventListener('click', () => {
+    setStoredConsent('accepted');
+    loadAnalytics();
+    hideCookieBanner();
+  });
+}
+const cookieRejectBtn = document.getElementById('cookieReject');
+if (cookieRejectBtn) {
+  cookieRejectBtn.addEventListener('click', () => {
+    setStoredConsent('rejected');
+    hideCookieBanner();
+  });
+}
+document.querySelectorAll('.cookie-settings-link').forEach(link => {
+  link.addEventListener('click', (e) => {
+    e.preventDefault();
+    showCookieBanner();
+  });
+});
+
 // ---- Google Analytics event tracking ----
 // Fires custom events for the actions that actually matter (CTA clicks, form
-// submissions) rather than relying on pageviews alone. Safe no-op if GA is
-// blocked or not yet loaded.
+// submissions) rather than relying on pageviews alone. Safe no-op if the
+// visitor hasn't consented yet (or GA hasn't loaded for any other reason).
 function trackEvent(name, params) {
   if (typeof gtag === 'function') gtag('event', name, params || {});
 }
