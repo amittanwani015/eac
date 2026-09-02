@@ -119,7 +119,7 @@ backToTop.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 's
 // default. Consent choice is remembered in localStorage so the banner only
 // shows once; the footer's "Cookie Settings" link lets a visitor reopen the
 // banner at any time to change their mind.
-const GA_MEASUREMENT_ID = 'G-XXXXXXXXXX'; // TODO: replace with the real GA4 ID before launch
+const GA_MEASUREMENT_ID = 'G-ZXFRS2CXNE';
 const CONSENT_KEY = 'eac_cookie_consent'; // localStorage value: 'accepted' | 'rejected'
 
 function loadAnalytics() {
